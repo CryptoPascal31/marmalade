@@ -1,12 +1,19 @@
 (namespace 'kip)
 
 (interface token-policy-v2
+  
+  (defschema token-policies
+    concrete-policies:object{kip.concrete-policy-v1.concrete-policy}
+    immutable-policies:[module{token-policy-v2}]
+    adjustable-policies:[module{token-policy-v2}]
+  )
 
   (defschema token-info
     id:string
     supply:decimal
     precision:integer
-    uri:string)
+    uri:string
+    policies:object{token-policies})
 
   (defun enforce-mint:bool
     ( token:object{token-info}

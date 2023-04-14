@@ -7,10 +7,8 @@
   (defcap GOVERNANCE ()
     (enforce-guard (keyset-ref-guard 'marmalade-admin )))
 
-   ; TODO: we might need a new concrecte-policy interface
-  ; kip.concrete-policy-v1
-  (implements kip.token-policy-v1)
-  (use kip.token-policy-v1 [token-info])
+  (implements kip.token-policy-v2)
+  (use kip.token-policy-v2 [token-info])
 
   (defcap QUOTE:bool
     ( sale-id:string
@@ -50,6 +48,9 @@
     spec:object{quote-spec})
 
   (deftable quotes:{quote-schema})
+
+  (defun get-quote:object{quote-schema} (sale-id:string)
+    (read quotes 'sale-id ))
 
   (defun enforce-ledger:bool ()
      (enforce-guard (marmalade.ledger.ledger-guard))
@@ -120,17 +121,17 @@
       (let* (
         (mk-fee-spec:object{marketplace-fee-spec} (read-msg MARKETPLACE-FEE-MSG-KEY))
         (mk-account:string (at 'marketplace-account mk-fee-spec))
-        (mk-fee:decimal (at 'fee mk-fee-spec)))
+        (mk-fee:decimal (at 'fee mk-fee-spec))
+        (fungible:module{fungible-v2} (at 'fungible spec) ))
         (fungible::transfer buyer mk-account mk-fee)
-      )
-
+      ;; check if royalty is turned on and pay royalty
       (bind spec
         { 'fungible := fungible:module{fungible-v2}
         , 'price := price:decimal
         , 'recipient := recipient:string
         }
-        (fungible::transfer buyer recipient (* amount price))
-      )
+        (fungible::transfer buyer recipient (- (* amount price) mk-fee))
+      ))
     )
     true
   )
@@ -159,6 +160,15 @@
       amount:decimal )
     (enforce-ledger)
     (enforce false "Transfer prohibited")
+  )
+
+  (defun enforce-withdraw:bool
+    ( token:object{token-info}
+      seller:string
+      amount:decimal
+      sale-id:string )
+    ;;TODO
+    true
   )
 )
 

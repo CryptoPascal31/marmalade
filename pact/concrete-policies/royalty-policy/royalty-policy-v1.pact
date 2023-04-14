@@ -7,18 +7,21 @@
   (defcap GOVERNANCE ()
     (enforce-guard (keyset-ref-guard 'marmalade-admin )))
 
+  (use marmalade.policy-manager)
+  (use marmalade.fungible-quote-policy-v1 [quote-spec quote-schema])
   ; TODO: we might need a new concrecte-policy interface
   ; kip.concrete-policy-v1
   ; multi-policy has a list of allowed concrete policies, policy registry
-  (implements kip.token-policy-v1)
-  (use kip.token-policy-v1 [token-info])
+  (implements kip.token-policy-v2)
+  (use kip.concrete-policy-v1 [QUOTE_POLICY])
+  (use kip.token-policy-v2 [token-info])
 
   (defschema royalty-schema
     fungible:module{fungible-v2}
     creator:string
     creator-guard:guard
     royalty-rate:decimal
-    quote-policy:module{kip.token-policy-v1}
+    quote-policy:module{kip.token-policy-v2}
   )
 
   (deftable royalties:{royalty-schema})
@@ -45,14 +48,16 @@
      (enforce-guard (marmalade.ledger.ledger-guard))
   )
 
-  (defun get-quote-policy:module{kip.token-policy-v1} ()
-    ;  TODO: retrieve quote-policy from multi-policy
-    (marmelade.multi-policy.get-quote-policy)
-  )
+  ; (defun get-quote-policy:module{kip.token-policy-v2} ()
+  ;   ;  TODO: retrieve quote-policy from multi-policy
+  ;   (marmalade.policy-manager.get-concrete-policy marmalade.policy.manager.QUOTE_POLICY)
+  ; )
 
   (defun enforce-init:bool
     ( token:object{token-info}
     )
+    (enforce (is-used (at 'policies token) QUOTE_POLICY) "quote policy must be turned on")
+    ;;checks if quote-policy is true ?
     (enforce-ledger)
     (let* ( (spec:object{royalty-schema} (read-msg ROYALTY_SPEC))
             (fungible:module{fungible-v2} (at 'fungible spec))
@@ -113,29 +118,24 @@
       sale-id:string )
     (enforce-ledger)
     (enforce-sale-pact sale-id)
-    (bind (get-policy token)
+    (bind (get-royalty token)
       { 'fungible := fungible:module{fungible-v2}
       , 'creator:= creator:string
       , 'royalty-rate:= royalty-rate:decimal
       }
-
-      (let ((quote-policy (get-quote-policy)))
-
-      (with-read quote-policy.quotes sale-id { 'id:= qtoken, 'spec:= spec:object{quote-policy.quote-spec} }
-        (enforce (= qtoken (at 'id token)) "incorrect sale token")
-        (bind spec
-          { 'price := price:decimal }
-          (let* ((sale-price:decimal (* amount price))
-                 (royalty-payout:decimal
-                    (floor (* sale-price royalty-rate) (fungible::precision))))
-            (if
-              (> royalty-payout 0.0)
-              (fungible::transfer buyer creator royalty-payout)
-              "No royalty")
-            ))
-            true
-        )))
-  )
+      (let* ( (quote:object{quote-schema} (marmalade.fungible-quote-policy-v1.get-quote sale-id))
+              (spec:object{quote-spec} (at 'spec quote))
+              (price:decimal (at 'price spec))
+              (sale-price:decimal (* amount price))
+              (royalty-payout:decimal
+                 (floor (* sale-price royalty-rate) (fungible::precision))))
+        (enforce (= (at 'id quote) (at 'id token)) "incorrect sale token")
+        (if
+          (> royalty-payout 0.0)
+          (fungible::transfer buyer creator royalty-payout)
+          "No royalty")
+        ))
+        true)
 
   (defun enforce-transfer:bool
     ( token:object{token-info}
@@ -156,6 +156,15 @@
       amount:decimal )
     (enforce-ledger)
     (enforce false "Transfer prohibited")
+  )
+
+  (defun enforce-withdraw:bool
+    ( token:object{token-info}
+      seller:string
+      amount:decimal
+      sale-id:string )
+    ;;TODO
+    true
   )
 )
 

@@ -7,8 +7,8 @@
   (defcap GOVERNANCE ()
     (enforce-guard (keyset-ref-guard 'marmalade-admin )))
 
-  (implements kip.token-policy-v1)
-  (use kip.token-policy-v1 [token-info])
+  (implements kip.token-policy-v2)
+  (use kip.token-policy-v2 [token-info])
 
   (defschema mint-guard-schema
     mint-guard:guard
@@ -40,8 +40,8 @@
     (enforce-ledger)
     (let ((mint-guard (at 'mint-guard (read mintguards (at 'id token)))))
       (enforce-guard mint-guard)
-      (enforce (= amount 1) "Mint can only be 1")
-      (enforce (= (at 'supply token) 0) "Only one mint allowed")
+      (enforce (= amount 1.0) "Mint can only be 1")
+      (enforce (= (at 'supply token) 0.0) "Only one mint allowed")
   ))
 
   (defun enforce-burn:bool
@@ -82,6 +82,14 @@
     (enforce-ledger)
   )
 
+  (defun enforce-withdraw:bool
+    ( token:object{token-info}
+      seller:string
+      amount:decimal
+      sale-id:string )
+    (enforce-ledger)
+  )
+
   (defun enforce-crosschain:bool
     ( token:object{token-info}
       sender:string
@@ -93,7 +101,6 @@
     (enforce false "Transfer prohibited")
   )
 )
-
 
 (if (read-msg 'upgrade)
   ["upgrade complete"]
