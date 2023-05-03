@@ -1,26 +1,28 @@
 (namespace (read-msg 'ns))
 
-(module non-fungible-policy-v1 GOVERNANCE
+(module onchain-manifest-policy GOVERNANCE
 
-  @doc "Concrete policy for issuing an nft with a fixed supply of 1"
+  @doc "onchain manifest storage for marmalade-v2"
+  (implements kip.token-policy-v2)
+
+  (use kip.token-manifest)
+  (use kip.token-policy-v2 [token-info])
 
   (defcap GOVERNANCE ()
     (enforce-guard (keyset-ref-guard 'marmalade-admin )))
 
-  (implements kip.token-policy-v2)
-  (use kip.token-policy-v2 [token-info])
-
-  (defschema mint-guard-schema
-    mint-guard:guard
+  (defschema onchain-manifest
+    manifest:{manifest}
+    guard:guard
   )
 
-  (deftable mintguards:{mint-guard-schema})
+  (deftable manifests:{onchain-manifest})
 
-  (defcap MINT (token-id:string)
-    (with-read mintguards token-id
-      { "mint-guard":= mint-guard }
-    (enforce-guard mint-guard)
-    true
+  (defcap UPGRADE (token-id:string)
+    (with-read manifests token-id {
+      "guard":=manifest-guard
+      }
+      (enforce-guard manifest-guard)
     )
   )
 
@@ -28,16 +30,26 @@
      (enforce-guard (marmalade.ledger.ledger-guard))
   )
 
+  (defun upgrade-manifest
+    ( token:object{token-info}
+      manifest:{manifest}
+    )
+    (with-capability (UPGRADE (at 'id token) )
+      (enforce-verify-manifest manifest)
+      (update manifests (at 'id token) manifest)
+    )
+  )
+
   (defun enforce-init:bool
     ( token:object{token-info}
     )
     (enforce-ledger)
-    (let ( (mint-guard:guard (read-keyset 'mint-guard )))
-
-    (insert mintguards (at 'id token)
-      { 'mint-guard: mint-guard })
-    true)
+    (let ( (manifest:{manifest} (read-msg 'manifest )) )
+      (enforce-verify-manifest manifest)
+      (insert manifests (at 'id token) manifest)
+    )
   )
+
 
   (defun enforce-mint:bool
     ( token:object{token-info}
@@ -46,11 +58,7 @@
       amount:decimal
     )
     (enforce-ledger)
-    (with-capability (MINT (at 'id token))
-      (enforce (= amount 1.0) "Mint can only be 1")
-      (enforce (= (at 'supply token) 0.0) "Only one mint allowed")
-    )
-  )
+    true)
 
   (defun enforce-burn:bool
     ( token:object{token-info}
@@ -58,8 +66,7 @@
       amount:decimal
     )
     (enforce-ledger)
-    (enforce false "Burn prohibited")
-  )
+    true)
 
   (defun enforce-offer:bool
     ( token:object{token-info}
@@ -69,7 +76,7 @@
     )
     @doc "Capture quote spec for SALE of TOKEN from message"
     (enforce-ledger)
-  )
+    true)
 
   (defun enforce-buy:bool
     ( token:object{token-info}
@@ -79,7 +86,8 @@
       amount:decimal
       sale-id:string )
     (enforce-ledger)
-  )
+    true)
+
 
   (defun enforce-transfer:bool
     ( token:object{token-info}
@@ -88,7 +96,8 @@
       receiver:string
       amount:decimal )
     (enforce-ledger)
-  )
+    true)
+
 
   (defun enforce-withdraw:bool
     ( token:object{token-info}
@@ -96,7 +105,7 @@
       amount:decimal
       sale-id:string )
     (enforce-ledger)
-  )
+    true)
 
   (defun enforce-crosschain:bool
     ( token:object{token-info}
@@ -112,5 +121,5 @@
 
 (if (read-msg 'upgrade)
   ["upgrade complete"]
-  [ (create-table mintguards)
+  [ (create-table manifests)
 ])
