@@ -6,7 +6,7 @@ The migration from V1 to V2 introduces several important changes that enhance th
 
 - [Token Policies](#token-policies)
 - [Policy Manager](#policy-manager)
-- [Offchain URI](#offchain-uri)
+- [Onchain Manifest to offchain URI](#onchain-manifest-to-offchain-uri)
 - [Migration of minted token from v1](#migration-of-minted-token-from-v1)
 
 ### Token Policies
@@ -35,24 +35,20 @@ In Marmalade v1, we called the `enforce-**` functions directly from the policy. 
 
 We also introduce `escrow` accounts in the policy manager, which are for tokens that use `fungible-quote-policy`. We let multiple policies to access the fungible quote, and escrow account to be used for paying a portion of the fungible to other policies that request it, i.e.) `royalty-policy`.
 
-### Manifests to Offchain URI
+### Onchain manifest to offchain URI
 
 In marmalade v1, we expected manifests in a data format specified by `kip.token-manifest.manifest` schema. Although this allowed easy storage of customized data for projects, it was impossible to build a standard around it.
 
-In V2, to provide marmalade tools, and marketplaces that standardizes the way of looking up token data, we are requesting `uri` in tokens. This `uri` will be expected to host a json object that follows the schema defined [here](./README.md#json-schema). We recommend storing data on IPFS for decentralized and available storage, but projects can decide depending on project needs.
+In V2, to provide marmalade tools, and marketplaces that standardizes the way of looking up token data, we are requesting `uri` in tokens. This `uri` will be expected to host a json object that follows the schema defined [here](./README.md#off-chain-schema). We recommend storing data on IPFS for decentralized and available storage, but projects can decide depending on project needs.
 
 Here are some guides to using IPFS:
 
 - [Marmalade guide to storing file on IPFS](https://docs.kadena.io/build/guides/marmalade-tutorial#interplanetary-storage-saving)
 - [Best Practices for Storing NFT Data Using IPFS](https://docs.ipfs.tech/how-to/best-practices-for-nft-data/#best-practices-for-storing-nft-data-using-ipfs)
 
-### Migration of minted token from v1
+#### Using Onchain with V2
 
-TODO - upgrade policy, burn v1 and mint v2
-
-## Using Onchain with V2
-
-With the transition to V2, we do not require using onchain-manifests. HHowever, for projects wishing to continue using onchain-manifests similar to V1, they can do so by adding `onchain-manifest-policy-v1` to the `immutable-policies` field. This policy accepts the `kip.token-manifest` schema, which aligns with the schema used in V1.
+With the transition to V2, we do not require using onchain-manifests. However, for projects wishing to continue using onchain-manifests similar to V1, they can do so by adding `onchain-manifest-policy-v1` to the `immutable-policies` field. This policy accepts the `kip.token-manifest` schema, which aligns with the schema used in V1.
 
 The manifests stored with `onchain-manifest-policy-v1` will be upgradable, hence it will require a guard to manage the upgrades. If the projects don't desire upgradable manifests, they can simple register a failing guard as the manifest guard.
 
@@ -65,4 +61,8 @@ Below is an example demonstrating the env-data required to add a manifest to the
  }
 ```
 
-Please be aware that offchain-uri will still be required in order to ensure that the tokens are supported by marmalade standards. Therefore, we recommend migrating to offchain-uri only if onchain-manifests are needed, as offchain-uri adequately fulfills most requirements.
+Please be aware that offchain-uri will still be required in order to ensure that the tokens are supported by marmalade standards. Therefore, we recommend using onchain-manifest-policy **only if** onchain-manifests are needed, as offchain-uri adequately fulfills most requirements.
+
+## Migration of minted token from v1
+
+For tokens minted in marmalade v1, we provide a `migration-policy-v1`, which allows to track old token-ids from new token-ids, and the amount burnt and minted. Please follow the instructions in [Migration steps using migration policy](./policies/migration-policy/migration-policy.md#migration-steps)
