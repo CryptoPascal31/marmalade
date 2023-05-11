@@ -1,11 +1,11 @@
 (namespace (read-msg 'ns))
 
-(module migration_v1 GOVERNANCE
+(module migration-policy-v1 GOVERNANCE
 
   @doc "Helper contract to migrate marmalade v1 tokens to v2"
-  (implements kip.token-policy-v2)
+  (implements marmalade.token-policy-v2)
 
-  (use kip.token-policy-v2 [token-info])
+  (use marmalade.token-policy-v2 [token-info])
 
   (defcap GOVERNANCE ()
     (enforce-guard (keyset-ref-guard 'marmalade-admin )))
@@ -24,12 +24,12 @@
   (deftable migrations:{migration})
   (deftable token-ids:{token-id-v2})
 
-  (defcap V1_MIGRATE_TOKEN (token-id-v1:string token-id-v2:string)
+  (defcap V1_MIGRATION_TOKEN (token-id-v1:string token-id-v2:string)
     @event
     true
   )
 
-  (defcap V1_MIGRATION_MINT (token-id-v1:string token-id-v2:string amount:decimal)
+  (defcap V1_MIGRATION_MINT (token-id-v1:string token-id-v2:string account:string amount:decimal)
     @event
     true
   )
@@ -41,20 +41,8 @@
   (defun enforce-init:bool
     ( token:object{token-info}
     )
-    @doc "Add previous token-id and ledger for migration"
     (enforce-ledger)
-    (let ( (token-id-v1:string (read-msg 'token-id-v1 )) )
-      ;; specify v1's ledger
-      (marmalade.ledger.total-supply token-id-v1)
-      (insert (at 'id token) {
-        "token-id-v1": token-id-v1
-       ,"token-id-v2": (at 'id token)
-       ,"amount": 0.0
-      })
-      (insert token-ids token-id-v1 {
-        "token-id-v2": (at 'id token)
-      })
-      (emit-event (V1_MIGRATE_TOKEN token-id-v1 (at 'id token))))
+    true
   )
 
   (defun enforce-mint:bool
@@ -65,16 +53,33 @@
     )
     @doc "BURN previous ledger's token by AMOUNT and MINT in marmalade v2 ledger"
     (enforce-ledger)
-    (with-read (at 'id token) {
-        "token-id-v1":= token-id-v1
-       ,"amount":= amount1
-      }
-      (update (at 'id token) {
-        "burn-amount": (+ amount amount1)
+     ;; v1 ledger 
+    (let* ((token-id-v1:string (read-msg 'token-id-v1 ))
+           (token-guard-v1:guard (marmalade.ledger.account-guard token-id-v1 account)) )
+      (enforce (= token-guard-v1 guard) "v1 account guards do not match")
+      (with-default-read migrations (at 'id token) {
+         "amount": 0.0
+        } {
+         "amount":= old-amount
+        }
+        ;; v1 ledger
+        (marmalade.ledger.burn token-id-v1 account amount)
+        (if  (> 0.0 old-amount)
+          "token is already registered"
+          [
+            (insert token-ids token-id-v1 {
+              "token-id-v2": (at 'id token)
+              })
+            (emit-event (V1_MIGRATION_TOKEN token-id-v1 (at 'id token)))
+          ]
+        )
+        (write migrations (at 'id token) {
+          "token-id-v1": token-id-v1
+         ,"token-id-v2": (at 'id token)
+         ,"amount": (+ old-amount amount)
         })
-      ;; specify v1's ledger
-      (marmalade.ledger.burn token-id-v1 account amount)
-      (emit-event (V1_MIGRATION_MINT token-id-v1 (at 'id token) amount)))
+        ;; specify v1's ledger
+        (emit-event (V1_MIGRATION_MINT token-id-v1 (at 'id token) account amount))))
   )
 
   (defun enforce-burn:bool

@@ -222,7 +222,14 @@
   )
 
   (defun create-token-id:string (token-details:object{token-details})
-    (format "t:{}" [(hash token-details)])
+    (format "t:{}"
+      [(hash (+  {'policies:
+                    (+
+                      {'adjustable-policies: []}
+                      (at 'policies token-details))
+                }
+                token-details ))
+      ])
   )
 
   (defun create-token:bool
