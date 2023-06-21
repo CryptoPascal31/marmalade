@@ -71,7 +71,7 @@
 
 -  **Alternatives**: In v2, enforcement functions are invoked from a centralized `policy-manager`. This streamlined approach facilitates more efficient policy management and enforcement.
 
-	 **v1: **
+  	**v1:**
 				
 		(policy::enforce-init)
 
