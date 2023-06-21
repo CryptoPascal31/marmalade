@@ -6,6 +6,10 @@
 ## What is marmalade (v2)
 The long-awaited release of Marmalade’s V2 standard has arrived, bringing a host of exciting updates and features to the top NFT standard in the industry! If you’ve been tracking the progress of Kadena and its NFT standards, you know we’ve been on a journey from the unstandardised on-chain metadata and single-policy token logic in V1 (KIP-13) to a far more robust and dynamic V2 (KIP-20). We’re thrilled to share the next stage of this adventure.
 
+
+## K
+TO-DO
+
 **Understanding KIP-0020: The Marmalade V2 Standard**
 
 Marmalade V1 initially introduced the use of the Haber manifest model and had a policy-model token system, allowing tokens to adopt various policies, which adds extra logic into the marmalade function such as create-token, mint, burn, transfer, sale. With the V1 model, tokens could be programmed to allow whitelisted collections, fungible sales with royalties, and more.
