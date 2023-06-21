@@ -10,4 +10,6 @@ The Marmalade V2 upgrade brings several substantial changes and enhancements to 
     
 4.  **Migration of minted tokens from V1**: The guide provides instructions for migrating tokens minted in V1 using `migration-policy-v1`, which tracks old and new token-ids and the amount burnt and minted.
     
-Overall, the migration from V1 to V2 of Marmalade introduces many enhancements and changes that provide improved functionality and flexibility to the platform. It's highly recommended to make the upgrade, and you can follow the detailed instructions in the [official Github migration guide](https://www.github.com/kadena.io/marmalade/migration).
+Overall, the migration from V1 to V2 of Marmalade introduces many enhancements and changes that provide improved functionality and flexibility to the platform. 
+
+It's highly recommended to make the upgrade, and you can follow the detailed instructions in the [official Github migration guide](https://www.github.com/kadena.io/marmalade/migration).
