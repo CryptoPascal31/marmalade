@@ -17,4 +17,5 @@ It was truly a testament to the power of listening to the needs of the community
 To learn more about Marmalade v1 for historic purposes try these recommended readings:
 
 [Mint a Marketplace! NFTs on Kadena Marmalade (Part 1)](https://medium.com/kadena-io/mint-a-marketplace-nfts-on-kadena-marmalade-part-1-2262cbfa5296)
+
 [Mint a Marketplace! NFTs on Kadena Marmalade (Part 2)](https://medium.com/kadena-io/mint-a-marketplace-nfts-on-kadena-marmalade-part-2-f1477a4cf736)
