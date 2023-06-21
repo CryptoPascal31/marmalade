@@ -100,11 +100,11 @@ The off-chain schema contains properties that describe the metadata of an NFT st
 The Marmalade v2 metadata standard for Non-Fungible Tokens (NFTs) adheres closely to the widely recognised ERC1155 metadata standard. By aligning with this well-established standard, Marmalade enables seamless portability and interoperability of NFTs between the Ethereum network and the Kadena blockchain.
 
 Both standards share similar fundamental attributes for describing NFTs.
-Marmalade v2 also supports additional optional fields, including "properties," which allow for the inclusion of arbitrary properties to enhance the uniqueness and individuality of each token. Similarly, the ERC1155 standard includes the "properties" field, ensuring compatibility between the two standards in terms of extensibility.
+Marmalade v2 also supports additional optional fields, including "properties," which allow for the inclusion of arbitrary properties to enhance the uniqueness and individuality of each token. Similarly, the ERC1155 metadata standard includes the "properties" field, ensuring compatibility between the two standards in terms of extensibility.
 
-Another key aspect where Marmalade v2 aligns with ERC1155 is the inclusion of the "authors" field, which enables the attribution of the individuals who created or contributed to the asset. This promotes transparency and recognition of the artistic and creative contributions associated with each NFT.
+Another addittion to Marmalade v2 is the inclusion of the "authors" field, which enables the attribution of the individuals who created or contributed to the asset. This promotes transparency and recognition of the artistic and creative contributions associated with each NFT.
 
-Moreover, both standards recognise the importance of categorisation and collection organization. The "collection" field in Marmalade v2, analogous to ERC1155, allows for specifying the name and family of the collection to which the NFT belongs. This categorisation provides context and grouping, facilitating efficient management and discovery of NFTs within a broader ecosystem.
+Marmalade v2 recognises the importance of categorisation and collection organization. The "collection" field in Marmalade v2, allows for specifying the name and family of the collection to which the NFT belongs. This categorisation provides context and grouping, facilitating efficient management and discovery of NFTs within a broader ecosystem.
 
 In summary, Marmalade's adoption of the ERC1155 metadata standard showcases a dedication to following established industry norms, ensuring consistency, compatibility, and ease of migration for NFTs. This commitment enables a broader range of users to participate in the vibrant world of digital collectibles while fostering interoperability between different blockchain ecosystems.
 
