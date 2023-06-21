@@ -1,5 +1,8 @@
 # NFTs on Kadena Marmalade
 
+![FyvvTtnWwAgSjTG](https://github.com/kadena-io/marmalade/assets/1943024/4c70a121-a34f-47dc-988d-ebe064cc5945)
+
+
 ## What is marmalade (v2)
 The long-awaited release of Marmalade’s V2 standard has arrived, bringing a host of exciting updates and features to the top NFT standard in the industry! If you’ve been tracking the progress of Kadena and its NFT standards, you know we’ve been on a journey from the unstandardised on-chain metadata and single-policy token logic in V1 (KIP-13) to a far more robust and dynamic V2 (KIP-20). We’re thrilled to share the next stage of this adventure.
 
@@ -32,6 +35,10 @@ With respect to concrete policies, we offer five primary concrete policies which
 -  **Guard-policy**: grants the ability to add optional guards to each marmalade action.
 
 To incorporate these features during token minting, Marmalade users simply need to add  `true`  or  `false`  next to the respective policy fields in  `**concrete-policies**`. Should projects require custom logic beyond what these concrete policies offer, they can deactivate the concrete policy and incorporate additional policies into the  `**immutable-policies**`or  `**adjustable-policies**`  fields.
+
+
+![schema](https://github.com/kadena-io/marmalade/assets/1943024/ef332648-7a5a-4438-a150-111165cfa9ff)
+
 
 **Migration**
 
