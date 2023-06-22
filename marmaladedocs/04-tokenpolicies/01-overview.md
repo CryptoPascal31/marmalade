@@ -1,4 +1,4 @@
-# What are Concrete-Policies
+# What are concrete-policies
 
 A concrete policy in Marmalade V2 is a pre-built, ready-to-use implementation of commonly used features in token creation. It simplifies the process of adding functionality to NFTs and offers convenience for token creators. With concrete policies, Marmalade aims to provide a rich set of features that can be easily added to tokens without the need for extensive custom development.
 
