@@ -2,7 +2,7 @@
 
 A concrete policy in Marmalade V2 is a pre-built, ready-to-use implementation of commonly used features in token creation. It simplifies the process of adding functionality to NFTs and offers convenience for token creators. With concrete policies, Marmalade aims to provide a rich set of features that can be easily added to tokens without the need for extensive custom development.
 
-When using a concrete policy, token creators can simply activate a policy by setting a boolean value to "true" or "false". The concrete policies available in Marmalade V2 are the Guard Policy, Collection Policy, Fungible Quote Policy, Non-fungible Policy, and Royalty Policy.
+When using a concrete policy, token creators can simply activate a policy by setting a boolean value to "true" or "false". The concrete policies available in Marmalade V2 are the Guard Policy, Collection Policy, Fungible Quote Policy, Non-fungible Policy, and Royalty Policy. (* TO-DO add links to policies)
 
 The Guard Policy ensures the initiation of a guard with each Marmalade activity. Guards are optional but recommended, as they help prevent unauthorised entities from minting tokens without permission. 
 
