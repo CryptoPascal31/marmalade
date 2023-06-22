@@ -6,7 +6,7 @@ Now, it may seem a little intimidating at first glance, but when you break it do
 This schema provides the structural foundation for key attributes of an NFT, each representing an integral facet of the NFT's identity. 
 However, the schema also allows for the addition of arbitrary properties that serve to enhance the individuality of each token.
 
-## Json standard
+## JSON standard
 
 A significant characteristic of marmalade involves the URI attribute, a pointer to an off-chain JSON file. This design ensures the delivery of usefull information on tokens without straining the constraints imposed by on-chain data storage fees.
 
