@@ -6,10 +6,10 @@
   (defcap GOVERNANCE ()
     (enforce-guard (keyset-ref-guard 'marmalade-admin )))
 
-  (implements kip.token-policy-v2 )
-  (implements marmalade.fungible-quote-policy-interface-v1)
-  (use marmalade.fungible-quote-policy-interface-v1 [quote-spec quote-schema marketplace-fee-spec QUOTE-MSG-KEY MARKETPLACE-FEE-MSG-KEY ])
-  (use kip.token-policy-v2 [token-info])
+  (implements n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2 )
+  (implements n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-interface-v1)
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-interface-v1 [quote-spec quote-schema marketplace-fee-spec QUOTE-MSG-KEY MARKETPLACE-FEE-MSG-KEY ])
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2 [token-info])
 
   (defschema bids-schema
     token-id:string
@@ -108,7 +108,7 @@
     (read quotes sale-id))
 
   (defun enforce-ledger:bool ()
-     (enforce-guard (marmalade.ledger.ledger-guard))
+     (enforce-guard (n_42174c7f0ec646f47ba227ffeb24714da378f4d1.ledger.ledger-guard))
   )
 
   (defun enforce-init:bool

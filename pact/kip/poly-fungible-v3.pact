@@ -1,6 +1,4 @@
-(enforce-pact-version "3.7")
-
-(namespace 'kip)
+(namespace (read-msg 'ns))
 
 (interface poly-fungible-v3
 
@@ -69,7 +67,7 @@
     @event
   )
 
-  (defcap TOKEN:bool (id:string precision:integer supply:decimal policies:[module{kip.token-policy-v2}] uri:string)
+  (defcap TOKEN:bool (id:string precision:integer supply:decimal policies:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}] uri:string)
     @doc " Emitted when token ID is created."
     @event
   )
@@ -180,7 +178,7 @@
     ( id:string
       precision:integer
       uri:string
-      policies:[module{kip.token-policy-v2}]
+      policies:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}]
     )
     @doc "Create a new token with ID, PRECISION, URI, and POLICY."
     @model

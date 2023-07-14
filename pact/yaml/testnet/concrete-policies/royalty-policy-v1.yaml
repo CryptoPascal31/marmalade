@@ -1,14 +1,14 @@
-codeFile: ../../ledger.pact
+codeFile: ../../../concrete-policies/royalty-policy/royalty-policy-v1.pact
 signers:
   - public: 120592c75f271f1be4aa857c56c0588edd5a444b4c8552e310e5f55c1988537a
 data:
   ns: "n_42174c7f0ec646f47ba227ffeb24714da378f4d1"
   upgrade: false
 networkId: testnet04
-nonce: install n_42174c7f0ec646f47ba227ffeb24714da378f4d1.ledger
+nonce: install n_42174c7f0ec646f47ba227ffeb24714da378f4d1.royalty-policy
 publicMeta:
   chainId: "1"
   sender: "k:120592c75f271f1be4aa857c56c0588edd5a444b4c8552e310e5f55c1988537a"
-  gasLimit: 100000
+  gasLimit: 150000
   gasPrice: 0.0000001
   ttl: 600

@@ -7,12 +7,12 @@
   (defcap GOVERNANCE ()
     (enforce-guard (keyset-ref-guard 'marmalade-admin )))
 
-  (use marmalade.policy-manager)
-  (use marmalade.policy-manager [QUOTE_POLICY])
-  (use marmalade.fungible-quote-policy-v1)
-  (use marmalade.fungible-quote-policy-interface-v1 [quote-spec quote-schema])
-  (implements kip.token-policy-v2)
-  (use kip.token-policy-v2 [token-info])
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager)
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager [QUOTE_POLICY])
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-v1)
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-interface-v1 [quote-spec quote-schema])
+  (implements n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2)
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2 [token-info])
 
 
   (defschema royalty-schema
@@ -43,7 +43,7 @@
   )
 
   (defun enforce-ledger:bool ()
-     (enforce-guard (marmalade.ledger.ledger-guard))
+     (enforce-guard (n_42174c7f0ec646f47ba227ffeb24714da378f4d1.ledger.ledger-guard))
   )
 
   (defun enforce-init:bool
@@ -116,7 +116,7 @@
       , 'creator:= creator:string
       , 'royalty-rate:= royalty-rate:decimal
       }
-      (let* ( (quote-policy:module{marmalade.fungible-quote-policy-interface-v1} (marmalade.policy-manager.get-concrete-policy QUOTE_POLICY))
+      (let* ( (quote-policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-interface-v1} (n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager.get-concrete-policy QUOTE_POLICY))
               (quote:object{quote-schema} (quote-policy::get-quote sale-id))
               (spec:object{quote-spec} (at 'spec quote))
               (price:decimal (at 'price spec))

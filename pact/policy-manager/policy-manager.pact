@@ -5,8 +5,7 @@
   (defcap GOVERNANCE ()
     (enforce-guard 'marmalade-admin ))
 
-  ; (implements kip.token-policy-v2)
-  (use kip.token-policy-v2 [token-info ])
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2 [token-info ])
 
   (defconst CONCRETE_POLICY_LIST
     [NON_FUNGIBLE_POLICY QUOTE_POLICY ROYALTY_POLICY COLLECTION_POLICY GUARD_POLICY] )
@@ -17,15 +16,15 @@
   (defconst COLLECTION_POLICY 'collection-policy )
   (defconst GUARD_POLICY 'guard-policy )
 
-  (defschema ledger 
-    ledger:module{kip.poly-fungible-v3}
+  (defschema ledger
+    ledger:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.poly-fungible-v3}
     ledger-guard:guard
   )
 
   (deftable ledgers:{ledger})
 
   (defschema concrete-policy
-    policy:module{kip.token-policy-v2}
+    policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}
   )
 
   (deftable concrete-policies:{concrete-policy})
@@ -53,7 +52,7 @@
     (read ledgers "")
   )
 
-  (defun is-used:bool (policies:[module{kip.token-policy-v2}] policy:string)
+  (defun is-used:bool (policies:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}] policy:string)
     (contains (get-concrete-policy policy) policies)
   )
 
@@ -69,7 +68,7 @@
       amount:decimal
     )
     (enforce-ledger)
-    (let ((policies:[module{kip.token-policy-v2}]  (at 'policies token)))
+    (let ((policies:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}]  (at 'policies token)))
       (map-mint token account guard amount policies)))
 
   (defun enforce-burn:[bool]
@@ -78,7 +77,7 @@
       amount:decimal
     )
     (enforce-ledger)
-    (let ((policies:[module{kip.token-policy-v2}]  (at 'policies token)))
+    (let ((policies:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}]  (at 'policies token)))
       (map-burn token account amount policies)))
 
   (defun enforce-offer:[bool]
@@ -88,7 +87,7 @@
       sale-id:string )
     (enforce-ledger)
     (enforce-sale-pact sale-id)
-    (let ((policies:[module{kip.token-policy-v2}]  (at 'policies token)))
+    (let ((policies:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}]  (at 'policies token)))
       (map-offer token seller amount sale-id policies)))
 
   (defun enforce-withdraw:[bool]
@@ -98,7 +97,7 @@
       sale-id:string )
     (enforce-ledger)
     (enforce-sale-pact sale-id)
-    (let ((policies:[module{kip.token-policy-v2}]  (at 'policies token)))
+    (let ((policies:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}]  (at 'policies token)))
       (map-withdraw token seller amount sale-id policies)))
 
   (defun enforce-buy:bool
@@ -110,12 +109,12 @@
       sale-id:string )
     (enforce-ledger)
     (enforce-sale-pact sale-id)
-    (let ((policies:[module{kip.token-policy-v2}]  (at 'policies token))
-          (quote-policy:module{kip.token-policy-v2, marmalade.fungible-quote-policy-interface-v1} (get-concrete-policy QUOTE_POLICY)))
+    (let ((policies:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}]  (at 'policies token))
+          (quote-policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2, n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-interface-v1} (get-concrete-policy QUOTE_POLICY)))
       (if (is-used policies QUOTE_POLICY)
         ;; quote policy is used
-        (let* ((quote:object{marmalade.fungible-quote-policy-interface-v1.quote-schema} (quote-policy::get-quote sale-id))
-               (spec:object{marmalade.fungible-quote-policy-interface-v1.quote-spec} (at 'spec quote))
+        (let* ((quote:object{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-interface-v1.quote-schema} (quote-policy::get-quote sale-id))
+               (spec:object{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-interface-v1.quote-spec} (at 'spec quote))
                (fungible:module{fungible-v2} (at 'fungible spec))
                (price:decimal (at 'price spec))
                (sale-price:decimal (floor (* price amount) (fungible::precision)))
@@ -146,7 +145,7 @@
       receiver:string
       amount:decimal )
     (enforce-ledger)
-    (let ((policies:[module{kip.token-policy-v2}]  (at 'policies token)))
+    (let ((policies:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}]  (at 'policies token)))
       (map-transfer token sender guard receiver amount policies)))
 
 
@@ -162,7 +161,7 @@
   )
 
 
-  (defun add-concrete-policy:bool (policy-field:string policy:module{kip.token-policy-v2})
+  (defun add-concrete-policy:bool (policy-field:string policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2})
     (contains policy-field CONCRETE_POLICY_LIST)
     (with-capability (ADMIN)
       (insert concrete-policies policy-field {
@@ -172,7 +171,7 @@
     true)
   )
 
-  (defun update-concrete-policy:bool (policy-field:string policy:module{kip.token-policy-v2})
+  (defun update-concrete-policy:bool (policy-field:string policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2})
     (contains policy-field CONCRETE_POLICY_LIST)
     (with-capability (ADMIN)
       (update concrete-policies policy-field {
@@ -182,7 +181,7 @@
     true)
   )
 
-  (defun get-concrete-policy:module{kip.token-policy-v2} (policy-field:string)
+  (defun get-concrete-policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2} (policy-field:string)
     (with-read concrete-policies policy-field {
       "policy":= policy
       }
@@ -193,51 +192,51 @@
     (at 'ledger-guard ledger)
   )
 
-  (defun get-ledger-contract:module{kip.poly-fungible-v3} (ledger:object{ledger})
+  (defun get-ledger-contract:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.poly-fungible-v3} (ledger:object{ledger})
     (at 'ledger ledger)
   )
 
   ;;utility functions to map policies
- (defun token-init (token:object{token-info} policy:module{kip.token-policy-v2})
+ (defun token-init (token:object{token-info} policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2})
   (policy::enforce-init token))
 
- (defun map-init (token:object{token-info} policy-list:[module{kip.token-policy-v2}])
+ (defun map-init (token:object{token-info} policy-list:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}])
   (map (token-init token) policy-list))
 
- (defun token-mint (token:object{token-info} account:string guard:guard amount:decimal policy:module{kip.token-policy-v2})
+ (defun token-mint (token:object{token-info} account:string guard:guard amount:decimal policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2})
   (policy::enforce-mint token account guard amount))
 
- (defun map-mint (token:object{token-info} account:string guard:guard amount:decimal policy-list:[module{kip.token-policy-v2}])
+ (defun map-mint (token:object{token-info} account:string guard:guard amount:decimal policy-list:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}])
   (map (token-mint token account guard amount) policy-list))
 
- (defun token-burn (token:object{token-info} account:string amount:decimal policy:module{kip.token-policy-v2})
+ (defun token-burn (token:object{token-info} account:string amount:decimal policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2})
   (policy::enforce-burn token account amount))
 
- (defun map-burn (token:object{token-info} account:string amount:decimal policy-list:[module{kip.token-policy-v2}])
+ (defun map-burn (token:object{token-info} account:string amount:decimal policy-list:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}])
   (map (token-burn token account amount) policy-list))
 
- (defun token-offer (token:object{token-info} account:string amount:decimal sale-id:string policy:module{kip.token-policy-v2})
+ (defun token-offer (token:object{token-info} account:string amount:decimal sale-id:string policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2})
   (policy::enforce-offer token account amount sale-id))
 
- (defun map-offer (token:object{token-info} account:string amount:decimal sale-id:string policy-list:[module{kip.token-policy-v2}])
+ (defun map-offer (token:object{token-info} account:string amount:decimal sale-id:string policy-list:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}])
   (map (token-offer token account amount sale-id) policy-list))
 
-  (defun token-withdraw (token:object{token-info} account:string amount:decimal sale-id:string policy:module{kip.token-policy-v2})
+  (defun token-withdraw (token:object{token-info} account:string amount:decimal sale-id:string policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2})
    (policy::enforce-withdraw token account amount sale-id))
 
-  (defun map-withdraw (token:object{token-info} account:string amount:decimal sale-id:string policy-list:[module{kip.token-policy-v2}])
+  (defun map-withdraw (token:object{token-info} account:string amount:decimal sale-id:string policy-list:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}])
    (map (token-withdraw token account amount sale-id) policy-list))
 
- (defun token-buy (token:object{token-info} seller:string buyer:string buyer-guard:guard amount:decimal sale-id:string policy:module{kip.token-policy-v2})
+ (defun token-buy (token:object{token-info} seller:string buyer:string buyer-guard:guard amount:decimal sale-id:string policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2})
   (policy::enforce-buy token seller buyer buyer-guard amount sale-id))
 
- (defun map-buy:[bool] (token:object{token-info} seller:string buyer:string buyer-guard:guard amount:decimal sale-id:string policy-list:[module{kip.token-policy-v2}])
+ (defun map-buy:[bool] (token:object{token-info} seller:string buyer:string buyer-guard:guard amount:decimal sale-id:string policy-list:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}])
   (map (token-buy token seller buyer buyer-guard amount sale-id) policy-list))
 
- (defun token-transfer (token:object{token-info} sender:string guard:guard receiver:string amount:decimal policy:module{kip.token-policy-v2})
+ (defun token-transfer (token:object{token-info} sender:string guard:guard receiver:string amount:decimal policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2})
   (policy::enforce-transfer  token sender guard receiver amount))
 
- (defun map-transfer (token:object{token-info} sender:string guard:guard receiver:string amount:decimal policy-list:[module{kip.token-policy-v2}])
+ (defun map-transfer (token:object{token-info} sender:string guard:guard receiver:string amount:decimal policy-list:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}])
   (map (token-transfer  token sender guard receiver amount) policy-list))
 
 )

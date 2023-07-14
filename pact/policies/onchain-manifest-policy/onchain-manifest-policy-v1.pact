@@ -3,10 +3,10 @@
 (module onchain-manifest-policy-v1 GOVERNANCE
 
   @doc "onchain manifest storage for marmalade-v2"
-  (implements kip.token-policy-v2)
+  (implements n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2)
 
   (use kip.token-manifest)
-  (use kip.token-policy-v2 [token-info])
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2 [token-info])
 
   (defcap GOVERNANCE ()
     (enforce-guard (keyset-ref-guard 'marmalade-admin )))
@@ -28,7 +28,7 @@
   )
 
   (defun enforce-ledger:bool ()
-     (enforce-guard (marmalade.ledger.ledger-guard))
+     (enforce-guard (n_42174c7f0ec646f47ba227ffeb24714da378f4d1.ledger.ledger-guard))
   )
 
   (defun get-manifest:object{manifest} (token-id:string)

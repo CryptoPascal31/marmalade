@@ -6,8 +6,8 @@
   (defcap GOVERNANCE ()
     (enforce-guard (keyset-ref-guard 'marmalade-admin )))
 
-  (implements kip.token-policy-v2)
-  (use kip.token-policy-v2 [token-info])
+  (implements n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2)
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2 [token-info])
 
   (defschema guards
     mint-guard:guard
@@ -77,7 +77,7 @@
   )
 
   (defun enforce-ledger:bool ()
-    (enforce-guard (marmalade.ledger.ledger-guard))
+    (enforce-guard (n_42174c7f0ec646f47ba227ffeb24714da378f4d1.ledger.ledger-guard))
   )
 
   (defun enforce-init:bool

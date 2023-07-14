@@ -1,4 +1,4 @@
-(namespace 'kip)
+(namespace (read-msg 'ns))
 
 (interface token-policy-v2
 

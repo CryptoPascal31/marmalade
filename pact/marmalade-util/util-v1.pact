@@ -1,9 +1,9 @@
 (namespace (read-msg 'ns))
 
 (module util-v1 GOVERNANCE
-  (use kip.token-policy-v2)
-  (use marmalade.policy-manager )
-  (use marmalade.policy-manager [CONCRETE_POLICY_LIST NON_FUNGIBLE_POLICY QUOTE_POLICY ROYALTY_POLICY COLLECTION_POLICY GUARD_POLICY])
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2)
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager )
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager [CONCRETE_POLICY_LIST NON_FUNGIBLE_POLICY QUOTE_POLICY ROYALTY_POLICY COLLECTION_POLICY GUARD_POLICY])
 
   (defschema concrete-policy-bool
     non-fungible-policy:bool
@@ -66,7 +66,7 @@
           (map (get-concrete-policy) used-policies))
   )
 
-  (defun create-concrete-policy:object{concrete-policy-bool} (policies:[module{kip.token-policy-v2}])
+  (defun create-concrete-policy:object{concrete-policy-bool} (policies:[module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2}])
     { 'quote-policy: (contains (get-concrete-policy QUOTE_POLICY) policies )
      ,'non-fungible-policy: (contains (get-concrete-policy NON_FUNGIBLE_POLICY) policies)
      ,'royalty-policy: (contains (get-concrete-policy ROYALTY_POLICY) policies)

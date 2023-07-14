@@ -1,0 +1,19 @@
+codeFile: ../../policy-manager/policy-manager.pact
+signers:
+  - public: dfb16b13e4032a6878fd98506b22cb0d6e5932c541e656b7ee5d69d72e6eb76e
+data:
+  ns: "n_42174c7f0ec646f47ba227ffeb24714da378f4d1"
+  upgrade: false
+networkId: testnet04
+nonce: install n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager
+publicMeta:
+  chainId: "1"
+  sender: "dfb16b13e4032a6878fd98506b22cb0d6e5932c541e656b7ee5d69d72e6eb76e"
+  gasLimit: 150000
+  gasPrice: 0.0000001
+  ttl: 600
+# {
+#     "requestKeys": [
+#         "oCnsw_B10xaCNHTzdltwyjsYoNIRU3M2sRLQ_qqTC_M"
+#     ]
+# }

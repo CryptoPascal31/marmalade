@@ -1,14 +1,13 @@
-codeFile: ../../util/fungible-util.pact
+codeFile: ../../kip/token-policy-v2.pact
 signers:
   - public: dfb16b13e4032a6878fd98506b22cb0d6e5932c541e656b7ee5d69d72e6eb76e
 data:
-  ns: "util"
-  upgrade: true
+  ns: "n_42174c7f0ec646f47ba227ffeb24714da378f4d1"
 networkId: testnet04
-nonce: "upgrade fungible-util"
+nonce: "[marmalade test]install n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2"
 publicMeta:
   chainId: "1"
   sender: "dfb16b13e4032a6878fd98506b22cb0d6e5932c541e656b7ee5d69d72e6eb76e"
-  gasLimit: 100000
+  gasLimit: 150000
   gasPrice: 0.0000001
   ttl: 600
