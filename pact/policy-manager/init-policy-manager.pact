@@ -1,5 +1,10 @@
 (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager [QUOTE_POLICY NON_FUNGIBLE_POLICY ROYALTY_POLICY COLLECTION_POLICY GUARD_POLICY])
 
+(n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager.init {
+  "ledger-guard": (n_42174c7f0ec646f47ba227ffeb24714da378f4d1.ledger.ledger-guard)
+  ,"ledger": n_42174c7f0ec646f47ba227ffeb24714da378f4d1.ledger
+})
+
 (n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager.add-concrete-policy QUOTE_POLICY n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-v1)
 (n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager.add-concrete-policy NON_FUNGIBLE_POLICY n_42174c7f0ec646f47ba227ffeb24714da378f4d1.non-fungible-policy-v1)
 (n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager.add-concrete-policy ROYALTY_POLICY n_42174c7f0ec646f47ba227ffeb24714da378f4d1.royalty-policy-v1)
