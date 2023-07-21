@@ -8,11 +8,9 @@
     (enforce-guard (keyset-ref-guard 'marmalade-admin )))
 
   (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager)
-  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager [QUOTE_POLICY])
-  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-v1)
-  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-interface-v1 [quote-spec quote-schema])
-  (implements n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2)
-  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.token-policy-v2 [token-info])
+  (use n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager [quote-spec quote-schema])
+  (implements kip.token-policy-v2)
+  (use kip.token-policy-v2 [token-info])
 
 
   (defschema royalty-schema
@@ -50,15 +48,13 @@
     ( token:object{token-info}
     )
     (enforce-ledger)
-    (let* ( (quote-used:bool (is-used (at 'policies token) QUOTE_POLICY))
-            (spec:object{royalty-schema} (read-msg ROYALTY_SPEC))
+    (let* ( (spec:object{royalty-schema} (read-msg ROYALTY_SPEC))
             (fungible:module{fungible-v2} (at 'fungible spec))
             (creator:string (at 'creator spec))
             (creator-guard:guard (at 'creator-guard spec))
             (royalty-rate:decimal (at 'royalty-rate spec))
             (creator-details:object (fungible::details creator ))
             )
-      (enforce quote-used "quote policy must be turned on")
       (enforce (=
         (at 'guard creator-details) creator-guard)
         "Creator guard does not match")
@@ -116,8 +112,7 @@
       , 'creator:= creator:string
       , 'royalty-rate:= royalty-rate:decimal
       }
-      (let* ( (quote-policy:module{n_42174c7f0ec646f47ba227ffeb24714da378f4d1.fungible-quote-policy-interface-v1} (n_42174c7f0ec646f47ba227ffeb24714da378f4d1.policy-manager.get-concrete-policy QUOTE_POLICY))
-              (quote:object{quote-schema} (quote-policy::get-quote sale-id))
+      (let* ( (quote:object{quote-schema} (get-quote-info sale-id))
               (spec:object{quote-spec} (at 'spec quote))
               (price:decimal (at 'price spec))
               (sale-price:decimal (* amount price))
